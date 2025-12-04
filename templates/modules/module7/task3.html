@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Module 7 – Task 3: Pose & Hand Tracking{% endblock %}
+
+{% block content %}
+<div class="page-head">
+  <h1 class="h1">Module 7 – Task 3: Pose &amp; Hand Tracking</h1>
+  <a class="btn ghost" href="{{ url_for('module_7') }}">← Back to Module 7 Dashboard</a>
+</div>
+
+<p class="muted">
+  This demo uses the <strong>server webcam</strong> (same as face login) and draws
+  <strong>pose</strong> and <strong>hand</strong> landmarks using MediaPipe.
+</p>
+
+<div class="card" style="max-width: 900px;">
+  <div class="row" style="justify-content: space-between; align-items: center;">
+    <p id="m7t3Status" class="muted" style="margin-bottom: 8px;">
+      Live stream should start automatically. If it freezes, click “Reload Stream”.
+    </p>
+<button id="m7t3ReloadBtn"
+        class="btn ghost"
+        type="button"
+        data-url="{{ url_for('module7_task3_video_feed') }}"
+        onclick="reloadPoseStream()">
+    🔄 Reload Stream
+</button>
+
+<script>
+function reloadPoseStream() {
+    const btn = document.getElementById("m7t3ReloadBtn");
+    const base = btn.dataset.url;
+    document.getElementById("poseStream").src = base + '?t=' + Date.now();
+}
+</script>
+
+  </div>
+
+  <div class="m7-video-box">
+    <!-- Exactly like face auth: MJPEG stream directly from backend -->
+    <img
+      id="poseStream"
+      src="{{ url_for('module7_task3_video_feed') }}"
+      alt="Pose &amp; Hand Stream"
+      style="width: 100%; border: 2px solid #444; border-radius: 8px; background:#000;"
+    />
+  </div>
+
+  <p class="small text-muted" style="margin-top: 10px;">
+    Notes:
+    <br>• This uses the same <code>get_camera()</code> backend stream as face auth.
+    <br>• If <code>mediapipe</code> isn’t installed, you’ll see a red warning drawn on the video.
+    <br>• If the image stops updating, use the <strong>Reload Stream</strong> button.
+  </p>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {# No extra JS needed here – stream works like face auth #}
+{% endblock %}
